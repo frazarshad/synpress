@@ -120,7 +120,7 @@ const metamask = {
   },
   async getExtensionDetails() {
     const metamaskExtensionData = (await playwright.getExtensionsData())
-      .metamask;
+      .keplr;
 
     extensionId = metamaskExtensionData.id;
     extensionVersion = metamaskExtensionData.version;
@@ -236,28 +236,33 @@ const metamask = {
     return true;
   },
   async importWallet(secretWords, password) {
-    await playwright.waitAndClick(
-      onboardingWelcomePageElements.importWalletButton,
+    await playwright.waitAndClickByText(
+      onboardingWelcomePageElements.createWalletButton,
       await playwright.metamaskWindow(),
-      {
-        waitForEvent: 'navi',
-      },
     );
-    await module.exports.optOutAnalytics();
+    await playwright.waitAndClickByText(
+      onboardingWelcomePageElements.importRecoveryPhraseButton,
+      await playwright.metamaskWindow(),
+    );
+    await playwright.waitAndClickByText(
+      onboardingWelcomePageElements.useRecoveryPhraseButton,
+      await playwright.metamaskWindow(),
+    );
+    // await module.exports.optOutAnalytics();
+    await playwright.waitAndClickByText(
+      firstTimeFlowImportPageElements.phraseCount24,
+      await playwright.metamaskWindow(),
+    );
     // todo: add support for more secret words (15/18/21/24)
     for (const [index, word] of secretWords.split(' ').entries()) {
-      await playwright.waitAndType(
-        firstTimeFlowImportPageElements.secretWordsInput(index),
-        word,
-      );
+      await playwright.waitAndTypeByLocator('textbox', word, index);
     }
     await playwright.waitAndClick(
-      firstTimeFlowImportPageElements.confirmSecretRecoverPhraseButton,
+      'button[type="submit"]',
       await playwright.metamaskWindow(),
-      {
-        waitForEvent: 'navi',
-      },
     );
+    // :focus =  wait for element to be in focus beforce typing
+    await playwright.waitAndType('input[name="name"]:focus', 'My wallet');
     await playwright.waitAndType(
       firstTimeFlowImportPageElements.passwordInput,
       password,
@@ -266,6 +271,29 @@ const metamask = {
       firstTimeFlowImportPageElements.confirmPasswordInput,
       password,
     );
+    await playwright.waitAndClick(
+      'button[type="submit"]',
+      await playwright.metamaskWindow(),
+      { number: 1 },
+    );
+    await playwright.waitForByText(
+      'Select Chains',
+      await playwright.metamaskWindow(),
+    );
+    await playwright.waitAndClick(
+      'button[type="button"]',
+      await playwright.metamaskWindow(),
+    );
+    await playwright.waitForByText(
+      'Account Created!',
+      await playwright.metamaskWindow(),
+    );
+    await playwright.waitAndClick(
+      'button[type="button"]',
+      await playwright.metamaskWindow(),
+      {dontWait: true}
+    );
+    return true;
     await playwright.waitAndClick(
       firstTimeFlowImportPageElements.termsCheckbox,
     );
@@ -888,17 +916,18 @@ const metamask = {
   },
   async acceptAccess(options) {
     const notificationPage = await playwright.switchToMetamaskNotification();
+    console.log(options);
     if (options && options.allAccounts) {
       await playwright.waitAndClick(
         notificationPageElements.selectAllCheckbox,
         notificationPage,
       );
     }
-    await playwright.waitAndClick(
-      notificationPageElements.nextButton,
-      notificationPage,
-      { waitForEvent: 'navi' },
-    );
+    // await playwright.waitAndClick(
+    //   notificationPageElements.nextButton,
+    //   notificationPage,
+    //   { waitForEvent: 'navi' },
+    // );
 
     if (options && options.signInSignature) {
       log(
@@ -933,7 +962,7 @@ const metamask = {
     }
 
     await playwright.waitAndClick(
-      permissionsPageElements.connectButton,
+      permissionsPageElements.approveButton,
       notificationPage,
       { waitForEvent: 'close' },
     );
@@ -1081,6 +1110,9 @@ const metamask = {
       }
     }
     log('[confirmTransaction] Checking if recipient address is present..');
+    console.log('hmm', (await playwright
+    .metamaskNotificationWindow()
+    .locator(confirmPageElements.recipientButton).count()));
     if (
       (await playwright
         .metamaskNotificationWindow()
@@ -1089,12 +1121,13 @@ const metamask = {
     ) {
       log('[confirmTransaction] Getting recipient address..');
 
-      const tooltip = await playwright.waitAndGetAttributeValue(
-        confirmPageElements.recipientAddressTooltipContainerButton,
-        'aria-describedby',
-        notificationPage,
-        true,
-      );
+      const tooltip = undefined;
+      // const tooltip = await playwright.waitAndGetAttributeValue(
+      //   confirmPageElements.recipientAddressTooltipContainerButton,
+      //   'aria-describedby',
+      //   notificationPage,
+      //   true,
+      // );
 
       // Handles the case where the recipient address is saved and has a "nickname".
       if (tooltip === 'tippy-tooltip-2') {
@@ -1132,11 +1165,11 @@ const metamask = {
     }
     // todo: handle setting of custom nonce here
     log('[confirmTransaction] Getting transaction nonce..');
-    txData.customNonce = await playwright.waitAndGetAttributeValue(
-      confirmPageElements.customNonceInput,
-      'placeholder',
-      notificationPage,
-    );
+    // txData.customNonce = await playwright.waitAndGetAttributeValue(
+    //   confirmPageElements.customNonceInput,
+    //   'placeholder',
+    //   notificationPage,
+    // );
     // todo: fix getting tx data on function multicall
     // log('[confirmTransaction] Checking if tx data is present..');
     // if (
@@ -1172,7 +1205,7 @@ const metamask = {
     // }
     log('[confirmTransaction] Confirming transaction..');
     await playwright.waitAndClick(
-      confirmPageElements.confirmButton,
+      confirmPageElements.recipientButton,
       notificationPage,
       { waitForEvent: 'close' },
     );
@@ -1331,13 +1364,14 @@ const metamask = {
     } else {
       await playwright.init();
     }
+    
     await playwright.assignWindows();
     await playwright.assignActiveTabName('metamask');
     await module.exports.getExtensionDetails();
-    await playwright.fixBlankPage();
-    await playwright.fixCriticalError();
+    // await playwright.fixBlankPage();
+    // await playwright.fixCriticalError();
     if (
-      (await playwright
+      true || (await playwright
         .metamaskWindow()
         .locator(onboardingWelcomePageElements.onboardingWelcomePage)
         .count()) > 0
@@ -1350,6 +1384,7 @@ const metamask = {
         await module.exports.createWallet(password);
         await module.exports.importAccount(secretWordsOrPrivateKey);
       }
+      return;
 
       await setupSettings(enableAdvancedSettings, enableExperimentalSettings);
 

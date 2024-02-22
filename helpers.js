@@ -225,7 +225,7 @@ module.exports = {
     }
 
     await module.exports.createDirIfNotExist(downloadsDirectory);
-    const metamaskDirectory = path.join(downloadsDirectory, release.tagName);
+    const metamaskDirectory = path.join(downloadsDirectory, "keplr-extension-manifest-v3-v0.12.69");
     const metamaskDirectoryExists =
       await module.exports.checkDirOrFileExist(metamaskDirectory);
     const metamaskManifestFilePath = path.join(

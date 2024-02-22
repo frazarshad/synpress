@@ -88,7 +88,7 @@ module.exports = {
   },
   async assignWindows() {
     const metamaskExtensionData = (await module.exports.getExtensionsData())
-      .metamask;
+      .keplr;
 
     let pages = await browser.contexts()[0].pages();
     for (const page of pages) {
@@ -97,14 +97,16 @@ module.exports = {
       } else if (
         page
           .url()
-          .includes(`chrome-extension://${metamaskExtensionData.id}/home.html`)
+          .includes(
+            `chrome-extension://${metamaskExtensionData.id}/register.html`,
+          )
       ) {
         metamaskWindow = page;
       } else if (
         page
           .url()
           .includes(
-            `chrome-extension://${metamaskExtensionData.id}/notification.html`,
+            `chrome-extension://${metamaskExtensionData.id}/popup.html#/sign-cosmos`,
           )
       ) {
         metamaskNotificationWindow = page;
@@ -162,7 +164,7 @@ module.exports = {
   },
   async switchToMetamaskNotification() {
     const metamaskExtensionData = (await module.exports.getExtensionsData())
-      .metamask;
+      .keplr;
 
     let pages = await browser.contexts()[0].pages();
     for (const page of pages) {
@@ -170,17 +172,17 @@ module.exports = {
         page
           .url()
           .includes(
-            `chrome-extension://${metamaskExtensionData.id}/notification.html`,
+            `chrome-extension://${metamaskExtensionData.id}/popup.html`,
           )
       ) {
         metamaskNotificationWindow = page;
         retries = 0;
         await page.bringToFront();
         await module.exports.waitUntilStable(page);
-        await module.exports.waitFor(
-          notificationPageElements.notificationAppContent,
-          page,
-        );
+        // await module.exports.waitForByText(
+        //   'agoric',
+        //   page,
+        // );
         return page;
       }
     }
@@ -195,10 +197,40 @@ module.exports = {
       );
     }
   },
-  async waitFor(selector, page = metamaskWindow) {
+  async waitFor(selector, page = metamaskWindow, number = 0) {
     await module.exports.waitUntilStable(page);
     await page.waitForSelector(selector, { strict: false });
-    const element = page.locator(selector).first();
+    const element = page.locator(selector).nth(number);
+    await element.waitFor();
+    await element.focus();
+    if (process.env.STABLE_MODE) {
+      if (!isNaN(process.env.STABLE_MODE)) {
+        await page.waitForTimeout(Number(process.env.STABLE_MODE));
+      } else {
+        await page.waitForTimeout(300);
+      }
+    }
+    return element;
+  },
+  async waitForByText(text, page = metamaskWindow) {
+    await module.exports.waitUntilStable(page);
+    // await page.waitForSelector(selector, { strict: false });
+    const element = page.getByText(text).first();
+    await element.waitFor();
+    await element.focus();
+    if (process.env.STABLE_MODE) {
+      if (!isNaN(process.env.STABLE_MODE)) {
+        await page.waitForTimeout(Number(process.env.STABLE_MODE));
+      } else {
+        await page.waitForTimeout(300);
+      }
+    }
+    return element;
+  },
+  async waitForByRole(role, number = 0, page = metamaskWindow) {
+    await module.exports.waitUntilStable(page);
+    // await page.waitForSelector(selector, { strict: false });
+    const element = page.getByRole(role).nth(number);
     await element.waitFor();
     await element.focus();
     if (process.env.STABLE_MODE) {
@@ -211,7 +243,11 @@ module.exports = {
     return element;
   },
   async waitAndClick(selector, page = metamaskWindow, args = {}) {
-    const element = await module.exports.waitFor(selector, page);
+    const element = await module.exports.waitFor(
+      selector,
+      page,
+      args.number || 0,
+    );
     if (args.numberOfClicks && !args.waitForEvent) {
       await element.click({
         clickCount: args.numberOfClicks,
@@ -240,9 +276,14 @@ module.exports = {
     await module.exports.waitUntilStable();
     return element;
   },
-  async waitAndClickByText(selector, text, page = metamaskWindow) {
-    await module.exports.waitFor(selector, page);
+  async waitAndClickByText(text, page = metamaskWindow) {
+    await module.exports.waitForByText(text, page);
     const element = `:is(:text-is("${text}"), :text("${text}"))`;
+    await page.click(element);
+    await module.exports.waitUntilStable();
+  },
+  async waitAndClickByRole(role, number = 0, page = metamaskWindow) {
+    const element = await module.exports.waitForByRole(role, number, page);
     await page.click(element);
     await module.exports.waitUntilStable();
   },
@@ -251,6 +292,19 @@ module.exports = {
       value = value.toString();
     }
     const element = await module.exports.waitFor(selector, page);
+    await element.type(value);
+    await module.exports.waitUntilStable(page);
+  },
+  async waitAndTypeByLocator(
+    selector,
+    value,
+    number = 0,
+    page = metamaskWindow,
+  ) {
+    if (typeof value === 'number') {
+      value = value.toString();
+    }
+    const element = await module.exports.waitForByRole(selector, number, page);
     await element.type(value);
     await module.exports.waitUntilStable(page);
   },
@@ -338,7 +392,7 @@ module.exports = {
   },
   async waitUntilStable(page) {
     const metamaskExtensionData = (await module.exports.getExtensionsData())
-      .metamask;
+      .keplr;
 
     if (
       page &&
@@ -356,7 +410,7 @@ module.exports = {
     await metamaskWindow.waitForLoadState('load');
     await metamaskWindow.waitForLoadState('domcontentloaded');
     await metamaskWindow.waitForLoadState('networkidle');
-    await module.exports.waitUntilMetamaskWindowIsStable();
+    // await module.exports.waitUntilMetamaskWindowIsStable();
     if (mainWindow) {
       await mainWindow.waitForLoadState('load');
       await mainWindow.waitForLoadState('domcontentloaded');

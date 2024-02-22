@@ -8,23 +8,28 @@ module.exports.metametricsPageElements = {
 
 const app = '#app-content .app';
 const onboardingWelcomePage = `${onboardingFlow} [data-testid="onboarding-welcome"]`;
-const importWalletButton = `${onboardingWelcomePage} [data-testid="onboarding-import-wallet"]`;
-const createWalletButton = `${onboardingWelcomePage} [data-testid="onboarding-create-wallet"]`;
+const importWalletButton = 'Import an existing wallet';
+const createWalletButton = 'Create a new wallet';
+const importRecoveryPhraseButton = 'Import existing recovery phrase';
+const useRecoveryPhraseButton = 'Use recovery phrase or private key';
 module.exports.onboardingWelcomePageElements = {
   app,
   onboardingWelcomePage,
   importWalletButton,
   createWalletButton,
+  importRecoveryPhraseButton,
+  useRecoveryPhraseButton,
 };
 
 const firstTimeFlowImportPage = `${onboardingFlow} [data-testid="import-srp"]`;
 const secretWordsInput = number =>
   `${firstTimeFlowImportPage} [data-testid="import-srp__srp-word-${number}"]`;
-const confirmSecretRecoverPhraseButton = `${firstTimeFlowImportPage} [data-testid="import-srp-confirm"]`;
+const confirmSecretRecoverPhraseButton = 'Import';
+const phraseCount24 = '24 words';
 
 const createPasswordPage = `${onboardingFlow} [data-testid="create-password"]`;
-const passwordInput = `${createPasswordPage} [data-testid="create-password-new"]`;
-const confirmPasswordInput = `${createPasswordPage} [data-testid="create-password-confirm"]`;
+const passwordInput = 'input[name="password"]';
+const confirmPasswordInput = 'input[name="confirmPassword"]';
 const termsCheckbox = `${createPasswordPage} [data-testid="create-password-terms"]`;
 const importButton = `${createPasswordPage} [data-testid="create-password-import"]`;
 const createButton = `${createPasswordPage} [data-testid="create-password-wallet"]`;
@@ -38,6 +43,7 @@ module.exports.firstTimeFlowImportPageElements = {
   termsCheckbox,
   importButton,
   createButton,
+  phraseCount24,
 };
 
 const secureYourWalletPage = '[data-testid="seed-phrase-intro"]';
