@@ -46,7 +46,7 @@
     "test:e2e:anvil": "start-server-and-test 'turbo start:server' http-get://localhost:3000 'CYPRESS_USE_ANVIL=true pnpm synpress:run'",
     "test:e2e:headless": "start-server-and-test 'turbo start:server' http-get://localhost:3000 'pnpm synpress:run --headless'",
     "test:e2e:headless:anvil": "start-server-and-test 'turbo start:server' http-get://localhost:3000 'CYPRESS_USE_ANVIL=true pnpm synpress:run --headless'",
-    "test:e2e:ci": "start-server-and-test 'turbo start:server' http-get://localhost:3000 'pnpm synpress:run --record --group'",
+    "test:e2e:ci": "start-server-and-test 'turbo start:server' http-get://localhost:3000 'pnpm synpress:run --group'",
     "test:e2e:ci:anvil": "start-server-and-test 'turbo start:server' http-get://localhost:3000 'CYPRESS_USE_ANVIL=true pnpm synpress:run --record --group'",
     "test:e2e:ci:cypress-action": "CYPRESS_USE_ANVIL=true pnpm synpress:run"
   },
