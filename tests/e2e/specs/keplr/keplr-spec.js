@@ -2,11 +2,7 @@
 describe('Keplr', () => {
   context('Test commands', () => {
     it(`setupKeplr should finish Keplr setup using secret words`, () => {
-      cy.setupKeplr(
-        'orbit bench unit task food shock brand bracket domain regular warfare company announce wheel grape trust sphere boy doctor half guard ritual three ecology',
-        'sepolia',
-        'Tester@1234',
-      ).then(setupFinished => {
+      cy.setupKeplr().then(setupFinished => {
         expect(setupFinished).to.be.true;
       });
     });

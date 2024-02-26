@@ -1,7 +1,9 @@
 const log = require('debug')('synpress:metamask');
 const playwright = require('./playwrightKeplr');
 const { onboardingElements } = require('../pages/keplr/first-time-flow-page');
-const { notificationPageElements } = require('../pages/keplr/notification-page');
+const {
+  notificationPageElements,
+} = require('../pages/keplr/notification-page');
 
 let extensionId;
 let extensionVersion;
@@ -203,13 +205,7 @@ const keplr = {
 
   async initialSetup(
     playwrightInstance,
-    {
-      secretWordsOrPrivateKey,
-      network,
-      password,
-      enableAdvancedSettings,
-      enableExperimentalSettings,
-    },
+    { secretWordsOrPrivateKey, password },
   ) {
     if (playwrightInstance) {
       await playwright.init(playwrightInstance);
