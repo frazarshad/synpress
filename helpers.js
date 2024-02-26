@@ -216,16 +216,10 @@ module.exports = {
   },
   async prepareMetamask(version) {
     const release = await module.exports.getMetamaskReleases(version);
-
-    let downloadsDirectory;
-    if (os.platform() === 'win32') {
-      downloadsDirectory = appRoot.resolve('/node_modules');
-    } else {
-      downloadsDirectory = path.resolve(__dirname, 'downloads');
-    }
+    let downloadsDirectory = path.resolve(__dirname, 'downloads');
 
     await module.exports.createDirIfNotExist(downloadsDirectory);
-    const metamaskDirectory = path.join(downloadsDirectory, "keplr-extension-manifest-v3-v0.12.69");
+    const metamaskDirectory = path.join(downloadsDirectory, "keplr-extension");
     const metamaskDirectoryExists =
       await module.exports.checkDirOrFileExist(metamaskDirectory);
     const metamaskManifestFilePath = path.join(
