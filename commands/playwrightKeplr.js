@@ -1,6 +1,7 @@
 const log = require('debug')('synpress:playwright');
 const fetch = require('node-fetch');
 const _ = require('underscore');
+const sleep = require('util').promisify(setTimeout);
 
 let browser;
 let mainWindow;
@@ -75,6 +76,14 @@ module.exports = {
   keplrNotificationWindow() {
     return keplrNotificationWindow;
   },
+
+  async waitAndClickByText(text, page = keplrWindow) {
+    await module.exports.waitForByText(text, page);
+    const element = `:is(:text-is("${text}"), :text("${text}"))`;
+    await page.click(element);
+    await module.exports.waitUntilStable();
+  },
+
   async waitAndSetValue(text, selector, page = keplrWindow) {
     const element = await module.exports.waitFor(selector, page);
     await element.fill('');
@@ -161,7 +170,7 @@ module.exports = {
   },
 
   async waitUntilStable(page) {
-    const metamaskExtensionData = (await module.exports.getExtensionsData())
+    const keplrExtensionData = (await module.exports.getExtensionsData())
       .keplr;
 
     if (
@@ -169,7 +178,7 @@ module.exports = {
       page
         .url()
         .includes(
-          `chrome-extension://${metamaskExtensionData.id}/register.html`,
+          `chrome-extension://${keplrExtensionData.id}/register.html`,
         )
     ) {
       await page.waitForLoadState('load');
