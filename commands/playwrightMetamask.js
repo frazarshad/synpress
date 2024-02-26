@@ -10,7 +10,7 @@ const {
 const sleep = require('util').promisify(setTimeout);
 const _ = require('underscore');
 
-console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW meeeeeeeeeeeeeeeeeeeee")
+
 let expectInstance;
 
 let browser;

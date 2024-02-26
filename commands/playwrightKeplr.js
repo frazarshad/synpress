@@ -5,8 +5,10 @@ const _ = require('underscore');
 let browser;
 let mainWindow;
 let keplrWindow;
+let keplrNotificationWindow;
 let activeTabName;
 let extensionsData = {};
+let retries = 0;
 
 module.exports = {
   async resetState() {
@@ -15,6 +17,8 @@ module.exports = {
     mainWindow = undefined;
     keplrWindow = undefined;
     activeTabName = undefined;
+    keplrNotificationWindow = undefined;
+    retries = 0;
     extensionsData = {};
   },
 
@@ -67,6 +71,66 @@ module.exports = {
   async isKeplrWindowActive() {
     return activeTabName === 'keplr';
   },
+
+  keplrNotificationWindow() {
+    return keplrNotificationWindow;
+  },
+  async waitAndSetValue(text, selector, page = keplrWindow) {
+    const element = await module.exports.waitFor(selector, page);
+    await element.fill('');
+    await module.exports.waitUntilStable(page);
+    await element.fill(text);
+    await module.exports.waitUntilStable(page);
+  },
+
+  async waitAndGetValue(selector, page = keplrWindow) {
+    const expect = expectInstance
+      ? expectInstance
+      : require('@playwright/test').expect;
+    const element = await module.exports.waitFor(selector, page);
+    await expect(element).toHaveText(/[a-zA-Z0-9]/, {
+      ignoreCase: true,
+      useInnerText: true,
+    });
+    const value = await element.innerText();
+    return value;
+  },
+
+  async waitAndClick(selector, page = keplrWindow, args = {}) {
+    const element = await module.exports.waitFor(
+      selector,
+      page,
+      args.number || 0,
+    );
+    if (args.numberOfClicks && !args.waitForEvent) {
+      await element.click({
+        clickCount: args.numberOfClicks,
+        force: args.force,
+      });
+    } else if (args.numberOfClicks && args.waitForEvent) {
+      await Promise.all([
+        page.waitForEvent(args.waitForEvent),
+        element.click({ clickCount: args.numberOfClicks, force: args.force }),
+      ]);
+    } else if (args.waitForEvent) {
+      if (args.waitForEvent.includes('navi')) {
+        await Promise.all([
+          page.waitForNavigation(),
+          element.click({ force: args.force }),
+        ]);
+      } else {
+        await Promise.all([
+          page.waitForEvent(args.waitForEvent),
+          element.click({ force: args.force }),
+        ]);
+      }
+    } else {
+      await element.click({ force: args.force });
+    }
+    await module.exports.waitUntilStable();
+    return element;
+  },
+
   async switchToCypressWindow() {
     if (mainWindow) {
       await mainWindow.bringToFront();
@@ -94,6 +158,38 @@ module.exports = {
     await keplrWindow.bringToFront();
     await module.exports.assignActiveTabName('keplr');
     return true;
+  },
+
+  async waitUntilStable(page) {
+    const metamaskExtensionData = (await module.exports.getExtensionsData())
+      .keplr;
+
+    if (
+      page &&
+      page
+        .url()
+        .includes(
+          `chrome-extension://${metamaskExtensionData.id}/register.html`,
+        )
+    ) {
+      await page.waitForLoadState('load');
+      await page.waitForLoadState('domcontentloaded');
+      await page.waitForLoadState('networkidle');
+    }
+    await keplrWindow.waitForLoadState('load');
+    await keplrWindow.waitForLoadState('domcontentloaded');
+    await keplrWindow.waitForLoadState('networkidle');
+
+    if (mainWindow) {
+      await mainWindow.waitForLoadState('load');
+      await mainWindow.waitForLoadState('domcontentloaded');
+      // todo: this may slow down tests and not be necessary but could improve stability
+      // await mainWindow.waitForLoadState('networkidle');
+    }
+  },
+
+  keplrWindow() {
+    return keplrWindow;
   },
 
   async waitFor(selector, page = keplrWindow, number = 0) {
@@ -164,7 +260,6 @@ module.exports = {
 
   async waitForByRole(role, number = 0, page = keplrWindow) {
     await module.exports.waitUntilStable(page);
-    // await page.waitForSelector(selector, { strict: false });
     const element = page.getByRole(role).nth(number);
     await element.waitFor();
     await element.focus();
@@ -194,38 +289,6 @@ module.exports = {
     const element = await module.exports.waitForByRole(selector, number, page);
     await element.type(value);
     await module.exports.waitUntilStable(page);
-  },
-
-  async waitUntilStable(page) {
-    const metamaskExtensionData = (await module.exports.getExtensionsData())
-      .keplr;
-
-    if (
-      page &&
-      page
-        .url()
-        .includes(
-          `chrome-extension://${metamaskExtensionData.id}/register.html`,
-        )
-    ) {
-      await page.waitForLoadState('load');
-      await page.waitForLoadState('domcontentloaded');
-      await page.waitForLoadState('networkidle');
-    }
-    await keplrWindow.waitForLoadState('load');
-    await keplrWindow.waitForLoadState('domcontentloaded');
-    await keplrWindow.waitForLoadState('networkidle');
-
-    if (mainWindow) {
-      await mainWindow.waitForLoadState('load');
-      await mainWindow.waitForLoadState('domcontentloaded');
-      // todo: this may slow down tests and not be necessary but could improve stability
-      // await mainWindow.waitForLoadState('networkidle');
-    }
-  },
-
-  keplrWindow() {
-    return keplrWindow;
   },
 
   async getExtensionsData() {
@@ -273,5 +336,34 @@ module.exports = {
     await page.close();
 
     return extensionsData;
+  },
+
+  async switchToKeplrNotification() {
+    const keplrExtensionData = (await module.exports.getExtensionsData()).keplr;
+
+    let pages = await browser.contexts()[0].pages();
+    for (const page of pages) {
+      if (
+        page
+          .url()
+          .includes(`chrome-extension://${keplrExtensionData.id}/popup.html`)
+      ) {
+        keplrNotificationWindow = page;
+        retries = 0;
+        await page.bringToFront();
+        await module.exports.waitUntilStable(page);
+        return page;
+      }
+    }
+    await sleep(200);
+    if (retries < 50) {
+      retries++;
+      return await module.exports.switchToKeplrNotification();
+    } else if (retries >= 50) {
+      retries = 0;
+      throw new Error(
+        '[switchToKeplrNotification] Max amount of retries to switch to keplr notification window has been reached. It was never found.',
+      );
+    }
   },
 };
