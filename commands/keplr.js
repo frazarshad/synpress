@@ -159,48 +159,13 @@ const keplr = {
   },
 
   async confirmTransaction() {
-    let txData = {};
     const notificationPage = await playwright.switchToKeplrNotification();
-
-    if (
-      (await playwright
-        .keplrNotificationWindow()
-        .locator(notificationPageElements.recipientButton)
-        .count()) > 0
-    ) {
-      await playwright.waitAndClick(
-        notificationPageElements.recipientButton,
-        notificationPage,
-      );
-      txData.recipientPublicAddress = await playwright.waitAndGetValue(
-        notificationPageElements.recipientPublicAddress,
-        notificationPage,
-      );
-      await playwright.waitAndClick(
-        notificationPageElements.popupCloseButton,
-        notificationPage,
-      );
-    }
-
-    if (
-      (await playwright
-        .keplrNotificationWindow()
-        .locator(notificationPageElements.networkLabel)
-        .count()) > 0
-    ) {
-      txData.networkName = await playwright.waitAndGetValue(
-        notificationPageElements.networkLabel,
-        notificationPage,
-      );
-    }
-
     await playwright.waitAndClick(
-      notificationPageElements.recipientButton,
+      notificationPageElements.approveButton,
       notificationPage,
       { waitForEvent: 'close' },
     );
-    txData.confirmed = true;
-    return txData;
+    return true;
   },
 
   async initialSetup(

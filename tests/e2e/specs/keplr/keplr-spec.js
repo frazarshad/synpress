@@ -10,8 +10,8 @@ describe('Keplr', () => {
     it(`acceptKeplrAccess should accept connection request to Keplr`, () => {
       cy.visit('/');
       cy.contains('Connect Wallet').click();
-      cy.acceptKeplrAccess().then(connected => {
-        expect(connected).to.be.true;
+      cy.acceptKeplrAccess().then(taskCompleted => {
+        expect(taskCompleted).to.be.true;
       });
       cy.get('.card')
         .contains('My Wallet')
@@ -22,8 +22,8 @@ describe('Keplr', () => {
 
     it(`confirmKeplrTransaction should confirm transaction for token creation (contract deployment) and check tx data`, () => {
       cy.contains('Make an Offer').click();
-      cy.confirmKeplrTransaction().then(txData => {
-        expect(txData.confirmed).to.be.true;
+      cy.confirmKeplrTransaction().then(taskCompleted => {
+        expect(taskCompleted).to.be.true;
       });
     });
   });
