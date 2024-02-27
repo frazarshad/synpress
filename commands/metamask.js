@@ -1,5 +1,5 @@
 const log = require('debug')('synpress:metamask');
-const playwright = require('./playwright');
+const playwright = require('./playwrightMetamask');
 
 const {
   onboardingWelcomePageElements,
@@ -9,6 +9,11 @@ const {
   endOfFlowPageElements,
   pinExtensionPageElements,
 } = require('../pages/metamask/first-time-flow-page');
+
+const {
+  onboardingElements,
+} = require('../pages/keplr/first-time-flow-page');
+
 const { mainPageElements } = require('../pages/metamask/main-page');
 const { unlockPageElements } = require('../pages/metamask/unlock-page');
 const {
@@ -237,90 +242,70 @@ const metamask = {
   },
   async importWallet(secretWords, password) {
     await playwright.waitAndClickByText(
-      onboardingWelcomePageElements.createWalletButton,
+      onboardingElements.createWalletButton,
       await playwright.metamaskWindow(),
     );
     await playwright.waitAndClickByText(
-      onboardingWelcomePageElements.importRecoveryPhraseButton,
+      onboardingElements.importRecoveryPhraseButton,
       await playwright.metamaskWindow(),
     );
     await playwright.waitAndClickByText(
-      onboardingWelcomePageElements.useRecoveryPhraseButton,
+      onboardingElements.useRecoveryPhraseButton,
       await playwright.metamaskWindow(),
     );
-    // await module.exports.optOutAnalytics();
     await playwright.waitAndClickByText(
-      firstTimeFlowImportPageElements.phraseCount24,
+      onboardingElements.phraseCount24,
       await playwright.metamaskWindow(),
     );
-    // todo: add support for more secret words (15/18/21/24)
+
     for (const [index, word] of secretWords.split(' ').entries()) {
-      await playwright.waitAndTypeByLocator('textbox', word, index);
+      await playwright.waitAndTypeByLocator(onboardingElements.textAreaSelector, word, index);
     }
+
     await playwright.waitAndClick(
-      'button[type="submit"]',
+      onboardingElements.submitPhraseButton,
       await playwright.metamaskWindow(),
     );
-    // :focus =  wait for element to be in focus beforce typing
-    await playwright.waitAndType('input[name="name"]:focus', 'My wallet');
+ 
+    await playwright.waitAndType(onboardingElements.walletInput, onboardingElements.walletName);
     await playwright.waitAndType(
-      firstTimeFlowImportPageElements.passwordInput,
+      onboardingElements.passwordInput,
       password,
     );
     await playwright.waitAndType(
-      firstTimeFlowImportPageElements.confirmPasswordInput,
+      onboardingElements.confirmPasswordInput,
       password,
     );
+
     await playwright.waitAndClick(
-      'button[type="submit"]',
+      onboardingElements.submitWalletDataButton,
       await playwright.metamaskWindow(),
       { number: 1 },
     );
+
     await playwright.waitForByText(
-      'Select Chains',
+      onboardingElements.phraseSelectChain,
       await playwright.metamaskWindow(),
     );
+
     await playwright.waitAndClick(
-      'button[type="button"]',
+      onboardingElements.submitChainButton,
       await playwright.metamaskWindow(),
     );
+
     await playwright.waitForByText(
-      'Account Created!',
+      onboardingElements.phraseAccountCreated,
       await playwright.metamaskWindow(),
     );
+
     await playwright.waitAndClick(
-      'button[type="button"]',
+      onboardingElements.finishButton,
       await playwright.metamaskWindow(),
       {dontWait: true}
     );
+
     return true;
-    await playwright.waitAndClick(
-      firstTimeFlowImportPageElements.termsCheckbox,
-    );
-    await playwright.waitAndClick(
-      firstTimeFlowImportPageElements.importButton,
-      await playwright.metamaskWindow(),
-      {
-        waitForEvent: 'navi',
-      },
-    );
-    await playwright.waitAndClick(
-      endOfFlowPageElements.allDoneButton,
-      await playwright.metamaskWindow(),
-      {
-        waitForEvent: 'navi',
-      },
-    );
-    await playwright.waitAndClick(pinExtensionPageElements.nextTabButton);
-    await playwright.waitAndClick(
-      pinExtensionPageElements.doneButton,
-      await playwright.metamaskWindow(),
-      {
-        waitForEvent: 'navi',
-      },
-    );
-    await module.exports.closePopupAndTooltips();
-    return true;
+    
   },
   async createWallet(password) {
     await playwright.waitAndClick(

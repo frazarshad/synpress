@@ -373,3 +373,26 @@ Cypress.Commands.add(
     return subject;
   },
 );
+
+// Keplr Commands
+Cypress.Commands.add(
+  'setupKeplr',
+  (
+    secretWordsOrPrivateKey = 'orbit bench unit task food shock brand bracket domain regular warfare company announce wheel grape trust sphere boy doctor half guard ritual three ecology',
+    password = 'Test1234',
+  ) => {
+    return cy.task('setupKeplr', {
+      secretWordsOrPrivateKey,
+      password
+    });
+  },
+);
+
+
+Cypress.Commands.add('acceptKeplrAccess', () => {
+  return cy.task('acceptKeplrAccess');
+});
+
+Cypress.Commands.add('confirmKeplrTransaction', () => {
+  return cy.task('confirmKeplrTransaction');
+});
