@@ -11,10 +11,11 @@ const fixturesFolder = `${synpressPath}/fixtures`;
 log(`Detected synpress fixtures path is: ${fixturesFolder}`);
 const supportFile = 'tests/e2e/support.js';
 
-const specPattern =
-  process.env.EXTENSION === 'metamask'
-    ? 'tests/e2e/specs/metamask/**/*.{js,jsx,ts,tsx}'
-    : 'tests/e2e/specs/keplr/**/*.{js,jsx,ts,tsx}';
+
+const specPattern = {
+  metamask: 'tests/e2e/specs/metamask/**/*.{js,jsx,ts,tsx}',
+  keplr : 'tests/e2e/specs/keplr/**/*.{js,jsx,ts,tsx}'
+}
 
 module.exports = defineConfig({
   userAgent: 'synpress',
@@ -38,12 +39,12 @@ module.exports = defineConfig({
     testIsolation: false,
     setupNodeEvents,
     baseUrl: 'http://localhost:3000',
-    specPattern,
+    specPattern: specPattern[process.env.EXTENSION],
     supportFile,
   },
   component: {
     setupNodeEvents,
-    specPattern: specPattern,
+    specPattern: specPattern[process.env.EXTENSION],
     supportFile,
   },
 });

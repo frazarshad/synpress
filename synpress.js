@@ -4,6 +4,8 @@ const program = require('commander');
 const { run, open } = require('./launcher');
 const { version } = require('./package.json');
 
+const SUPPORTED_EXTENSIONS = ['metamask', 'keplr']
+
 if (process.env.DEBUG && process.env.DEBUG.includes('synpress')) {
   log('DEBUG mode is enabled');
   process.env.PWDEBUG = 1;
@@ -26,8 +28,17 @@ if (process.env.SYNPRESS_LOCAL_TEST) {
   });
 }
 
+if (!process.env.EXTENSION) {
+  throw new Error('Please provide EXTENSION environment variable');
+}
+if (!SUPPORTED_EXTENSIONS.includes(process.env.EXTENSION)) {
+  throw new Error(
+    `Invalid EXTENSION value. EXTENSION can have the following values: ${SUPPORTED_EXTENSIONS.toString()}`,
+  );
+}
+
 // if user skips metamask install or setup
-if (!process.env.SKIP_METAMASK_INSTALL && !process.env.SKIP_METAMASK_SETUP) {
+if (process.env.EXTENSION === 'metamask' && !process.env.SKIP_METAMASK_INSTALL && !process.env.SKIP_METAMASK_SETUP) {
   // we don't want to check for presence of SECRET_WORDS or PRIVATE_KEY
   if (!process.env.SECRET_WORDS && !process.env.PRIVATE_KEY) {
     throw new Error(
