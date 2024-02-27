@@ -25,7 +25,7 @@ Cypress.on('window:before:load', win => {
 });
 
 before(async () => {
-  if (Cypress.env('EXTENSION') === 'metamask' && !Cypress.env('SKIP_METAMASK_SETUP')) {
+  if (Cypress.env('EXTENSION') === 'metamask' && !Cypress.env('SKIP_EXTENSION_SETUP')) {
     await cy.setupMetamask();
   }
 });

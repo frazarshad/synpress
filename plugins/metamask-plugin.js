@@ -182,8 +182,8 @@ module.exports = (on, config) => {
     config.retries.openMode = 1;
   }
 
-  if (process.env.SKIP_METAMASK_SETUP) {
-    config.env.SKIP_METAMASK_SETUP = true;
+  if (process.env.SKIP_EXTENSION_SETUP) {
+    config.env.SKIP_EXTENSION_SETUP = true;
   }
 
   return config;
