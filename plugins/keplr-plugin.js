@@ -66,17 +66,11 @@ module.exports = (on, config) => {
     confirmKeplrTransaction: keplr.confirmTransaction,
     setupKeplr: async ({
       secretWordsOrPrivateKey,
-      network,
-      password,
-      enableAdvancedSettings,
-      enableExperimentalSettings,
+      password
     }) => {
       await keplr.initialSetup(null, {
         secretWordsOrPrivateKey,
-        network,
-        password,
-        enableAdvancedSettings,
-        enableExperimentalSettings,
+        password
       });
       return true;
     },

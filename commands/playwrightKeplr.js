@@ -164,7 +164,6 @@ module.exports = {
   },
 
   async switchToKeplrWindow() {
-    console.log("KEPLRRRRRRRRRRRRR", keplrWindow.bringToFront)
     await keplrWindow.bringToFront();
     await module.exports.assignActiveTabName('keplr');
     return true;
