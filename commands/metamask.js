@@ -1,5 +1,5 @@
 const log = require('debug')('synpress:metamask');
-const playwright = require('./playwright');
+const playwright = require('./playwrightMetamask');
 const sleep = require('util').promisify(setTimeout);
 
 const {
