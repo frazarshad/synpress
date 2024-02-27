@@ -396,10 +396,10 @@ Cypress.Commands.add('confirmTransaction', () => {
   return cy.task('confirmTransaction');
 });
 
-Cypress.Commands.add('isKeplrWindowActive', () => {
-  return cy.task('isKeplrWindowActive');
+Cypress.Commands.add('isExtensionWindowActive', () => {
+  return cy.task('isExtensionWindowActive');
 });
 
-Cypress.Commands.add('switchToKeplrWindow', () => {
-  return cy.task('switchToKeplrWindow');
+Cypress.Commands.add('switchToExtensionWindow', () => {
+  return cy.task('switchToExtensionWindow');
 });

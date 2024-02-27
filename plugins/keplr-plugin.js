@@ -53,15 +53,15 @@ module.exports = (on, config) => {
     initPlaywright: playwright.init,
     assignWindows: playwright.assignWindows,
     assignActiveTabName: playwright.assignActiveTabName,
-    isKeplrWindowActive: playwright.isKeplrWindowActive,
+    isExtensionWindowActive: playwright.isKeplrWindowActive,
     switchToCypressWindow: playwright.switchToCypressWindow,
     clearPlaywright: playwright.clear,
     clearWindows: playwright.clearWindows,
     isCypressWindowActive: playwright.isCypressWindowActive,
-    switchToKeplrWindow: playwright.switchToKeplrWindow,
+    switchToExtensionWindow: playwright.switchToKeplrWindow,
 
     // keplr commands
-    importKeplrAccount: keplr.importWallet,
+    importWallet: keplr.importWallet,
     acceptAccess: keplr.acceptAccess,
     confirmTransaction: keplr.confirmTransaction,
     setupWallet: async ({
