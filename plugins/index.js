@@ -3,8 +3,11 @@ module.exports = (on, config) => {
   let selectedConfig;
   if (extension === 'metamask') {
     selectedConfig = require('./metamask-plugin');
-  } else {
+  } else if (extension === 'keplr') {
     selectedConfig = require('./keplr-plugin');
+  } else {
+     throw new InvalidInputException('${extension} is not a valid extension name')
+  }
   }
 
   return selectedConfig(on, config);
