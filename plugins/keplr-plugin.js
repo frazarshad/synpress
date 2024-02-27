@@ -31,10 +31,10 @@ module.exports = (on, config) => {
 
     if (!process.env.SKIP_METAMASK_INSTALL) {
       // NOTE: extensions cannot be loaded in headless Chrome
-      const metamaskPath = await helpers.prepareKeplr(
-        process.env.METAMASK_VERSION || '10.25.0',
+      const keplrPath = await helpers.prepareExtension(
+        process.env.KEPLR_VERSION || '0.12.68', process.env.EXTENSION
       );
-      arguments_.extensions.push(metamaskPath);
+      arguments_.extensions.push(keplrPath);
     }
 
     return arguments_;

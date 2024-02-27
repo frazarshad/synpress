@@ -38,7 +38,7 @@ if (!SUPPORTED_EXTENSIONS.includes(process.env.EXTENSION)) {
 }
 
 // if user skips metamask install or setup
-if (process.env.EXTENSION === 'metamask' && !process.env.SKIP_METAMASK_INSTALL && !process.env.SKIP_METAMASK_SETUP) {
+if (process.env.EXTENSION === 'metamask' && !process.env.SKIP_METAMASK_INSTALL && !process.env.SKIP_EXTENSION_SETUP) {
   // we don't want to check for presence of SECRET_WORDS or PRIVATE_KEY
   if (!process.env.SECRET_WORDS && !process.env.PRIVATE_KEY) {
     throw new Error(
@@ -47,7 +47,7 @@ if (process.env.EXTENSION === 'metamask' && !process.env.SKIP_METAMASK_INSTALL &
   }
 } else {
   log(
-    'Skipping check for SECRET_WORDS and PRIVATE_KEY as SKIP_METAMASK_INSTALL or SKIP_METAMASK_SETUP is set',
+    'Skipping check for SECRET_WORDS and PRIVATE_KEY as SKIP_METAMASK_INSTALL or SKIP_EXTENSION_SETUP is set',
   );
 }
 
