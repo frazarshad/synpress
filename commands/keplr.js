@@ -1,4 +1,4 @@
-const log = require('debug')('synpress:metamask');
+const log = require('debug')('synpress:keplr');
 const playwright = require('./playwrightKeplr');
 const { onboardingElements } = require('../pages/keplr/first-time-flow-page');
 const {
