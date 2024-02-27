@@ -252,8 +252,15 @@ module.exports = {
       );
     }
   },
-  async prepareMetamask(version) {
-    const release = await module.exports.getMetamaskReleases(version);
+  async prepareExtension(version, extension) {
+    let release;
+    if (extension === 'metamask') {
+      release = await module.exports.getMetamaskReleases(version);
+    } else if (extension === 'keplr') {
+      release = await module.exports.getKeplrReleases(version);
+    } else {
+      throw new Error('Please provide a valid extension name');
+    }
 
     let downloadsDirectory;
     if (os.platform() === 'win32') {
@@ -263,52 +270,22 @@ module.exports = {
     }
 
     await module.exports.createDirIfNotExist(downloadsDirectory);
-    const metamaskDirectory = path.join(downloadsDirectory, release.tagName);
-    const metamaskDirectoryExists =
-      await module.exports.checkDirOrFileExist(metamaskDirectory);
-    const metamaskManifestFilePath = path.join(
+    const extensionDirectory = path.join(downloadsDirectory, release.tagName);
+    const extensionDirectoryExists =
+      await module.exports.checkDirOrFileExist(extensionDirectory);
+    const extensionManifestFilePath = path.join(
       downloadsDirectory,
       release.tagName,
       'manifest.json',
     );
-    const metamaskManifestFileExists = await module.exports.checkDirOrFileExist(
-      metamaskManifestFilePath,
+    const extensionManifestFileExists = await module.exports.checkDirOrFileExist(
+      extensionManifestFilePath,
     );
-    if (!metamaskDirectoryExists && !metamaskManifestFileExists) {
-      await module.exports.download(release.downloadUrl, metamaskDirectory);
+    if (!extensionDirectoryExists && !extensionManifestFileExists) {
+      await module.exports.download(release.downloadUrl, extensionDirectory);
     } else {
-      log('Metamask is already downloaded');
+      log('Extension is already downloaded');
     }
-    return metamaskDirectory;
-  },
-
-  async prepareKeplr(version) {
-    const release = await module.exports.getKeplrReleases(version);
-
-    let downloadsDirectory;
-    if (os.platform() === 'win32') {
-      downloadsDirectory = appRoot.resolve('/node_modules');
-    } else {
-      downloadsDirectory = path.resolve(__dirname, 'downloads');
-    }
-
-    await module.exports.createDirIfNotExist(downloadsDirectory);
-    const keplrDirectory = path.join(downloadsDirectory, release.tagName);
-    const keplrDirectoryExists =
-      await module.exports.checkDirOrFileExist(keplrDirectory);
-    const keplrManifestFilePath = path.join(
-      downloadsDirectory,
-      release.tagName,
-      'manifest.json',
-    );
-    const keplrManifestFileExists = await module.exports.checkDirOrFileExist(
-      keplrManifestFilePath,
-    );
-    if (!keplrDirectoryExists && !keplrManifestFileExists) {
-      await module.exports.download(release.downloadUrl, keplrDirectory);
-    } else {
-      log('Keplr is already downloaded');
-    }
-    return keplrDirectory;
-  },
+    return extensionDirectory;
+  },  
 };
