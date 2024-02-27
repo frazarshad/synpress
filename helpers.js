@@ -193,6 +193,44 @@ module.exports = {
       );
     }
   },
+  async getKeplrReleases(version) {
+    log(`Trying to find keplr version ${version} in GitHub releases..`);
+    let filename;
+    let downloadUrl;
+    let tagName;
+    let response;
+
+    try {
+      if (version === 'latest' || !version) {
+        response = await axios.get(
+          'https://api.github.com/repos/chainapsis/keplr-wallet/releases',
+        );
+
+        filename = response.data[0].assets[0].name;
+        downloadUrl = response.data[0].assets[0].browser_download_url;
+        tagName = response.data[0].tag_name;
+        log(
+          `Keplr version found! Filename: ${filename}; Download url: ${downloadUrl}; Tag name: ${tagName}`,
+        );
+      } else if (version) {
+        filename = `keplr-extension-manifest-v2-v${version}.zip`;
+        downloadUrl = `https://github.com/chainapsis/keplr-wallet/releases/download/v${version}/keplr-extension-manifest-v2-v${version}.zip`;
+        tagName = `keplr-extension-manifest-${version}`;
+        log(
+          `Keplr version found! Filename: ${filename}; Download url: ${downloadUrl}; Tag name: ${tagName}`,
+        );
+      }
+      return {
+        filename,
+        downloadUrl,
+        tagName,
+      };
+    } catch (e) {
+      throw new Error(
+        `[getKeplrReleases] Unable to fetch metamask releases from GitHub with following error:\n${e}`,
+      );
+    }
+  },
   async download(url, destination) {
     try {
       log(
@@ -210,7 +248,7 @@ module.exports = {
       }
     } catch (e) {
       throw new Error(
-        `[download] Unable to download metamask release from: ${url} to: ${destination} with following error:\n${e}`,
+        `[download] Unable to download release from: ${url} to: ${destination} with following error:\n${e}`,
       );
     }
   },
@@ -245,25 +283,32 @@ module.exports = {
   },
 
   async prepareKeplr(version) {
-    const release = await module.exports.getMetamaskReleases(version);
-    let downloadsDirectory = path.resolve(__dirname, 'downloads');
+    const release = await module.exports.getKeplrReleases(version);
+
+    let downloadsDirectory;
+    if (os.platform() === 'win32') {
+      downloadsDirectory = appRoot.resolve('/node_modules');
+    } else {
+      downloadsDirectory = path.resolve(__dirname, 'downloads');
+    }
+
     await module.exports.createDirIfNotExist(downloadsDirectory);
-    const metamaskDirectory = path.join(downloadsDirectory, "keplr-extension");
-    const metamaskDirectoryExists =
-      await module.exports.checkDirOrFileExist(metamaskDirectory);
-    const metamaskManifestFilePath = path.join(
+    const keplrDirectory = path.join(downloadsDirectory, release.tagName);
+    const keplrDirectoryExists =
+      await module.exports.checkDirOrFileExist(keplrDirectory);
+    const keplrManifestFilePath = path.join(
       downloadsDirectory,
       release.tagName,
       'manifest.json',
     );
-    const metamaskManifestFileExists = await module.exports.checkDirOrFileExist(
-      metamaskManifestFilePath,
+    const keplrManifestFileExists = await module.exports.checkDirOrFileExist(
+      keplrManifestFilePath,
     );
-    if (!metamaskDirectoryExists && !metamaskManifestFileExists) {
-      await module.exports.download(release.downloadUrl, metamaskDirectory);
+    if (!keplrDirectoryExists && !keplrManifestFileExists) {
+      await module.exports.download(release.downloadUrl, keplrDirectory);
     } else {
-      log('Metamask is already downloaded');
+      log('Keplr is already downloaded');
     }
-    return metamaskDirectory;
+    return keplrDirectory;
   },
 };
