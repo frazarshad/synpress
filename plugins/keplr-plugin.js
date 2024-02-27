@@ -62,9 +62,9 @@ module.exports = (on, config) => {
 
     // keplr commands
     importKeplrAccount: keplr.importWallet,
-    acceptKeplrAccess: keplr.acceptAccess,
-    confirmKeplrTransaction: keplr.confirmTransaction,
-    setupKeplr: async ({
+    acceptAccess: keplr.acceptAccess,
+    confirmTransaction: keplr.confirmTransaction,
+    setupWallet: async ({
       secretWordsOrPrivateKey,
       password
     }) => {

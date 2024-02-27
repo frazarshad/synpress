@@ -376,25 +376,24 @@ Cypress.Commands.add(
 
 // Keplr Commands
 Cypress.Commands.add(
-  'setupKeplr',
+  'setupWallet',
   (
     secretWordsOrPrivateKey = 'orbit bench unit task food shock brand bracket domain regular warfare company announce wheel grape trust sphere boy doctor half guard ritual three ecology',
     password = 'Test1234',
   ) => {
-    return cy.task('setupKeplr', {
+    return cy.task('setupWallet', {
       secretWordsOrPrivateKey,
       password
     });
   },
 );
 
-
-Cypress.Commands.add('acceptKeplrAccess', () => {
-  return cy.task('acceptKeplrAccess');
+Cypress.Commands.add('acceptAccess', () => {
+  return cy.task('acceptAccess');
 });
 
-Cypress.Commands.add('confirmKeplrTransaction', () => {
-  return cy.task('confirmKeplrTransaction');
+Cypress.Commands.add('confirmTransaction', () => {
+  return cy.task('confirmTransaction');
 });
 
 Cypress.Commands.add('isKeplrWindowActive', () => {
