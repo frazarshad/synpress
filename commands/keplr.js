@@ -106,48 +106,6 @@ const keplr = {
     return true;
   },
 
-  async confirmSignatureRequest() {
-    const notificationPage = await playwright.switchToKeplrNotification();
-    if (
-      (await playwright
-        .keplrNotificationWindow()
-        .locator(signaturePageElements.signatureRequestScrollDownButton)
-        .count()) > 0
-    ) {
-      await playwright.waitAndClick(
-        signaturePageElements.signatureRequestScrollDownButton,
-        notificationPage,
-      );
-    }
-    await playwright.waitAndClick(
-      signaturePageElements.confirmSignatureRequestButton,
-      notificationPage,
-      { waitForEvent: 'close' },
-    );
-    return true;
-  },
-
-  async confirmDataSignatureRequest() {
-    const notificationPage = await playwright.switchToKeplrNotification();
-    if (
-      (await playwright
-        .keplrNotificationWindow()
-        .locator(signaturePageElements.signatureRequestScrollDownButton)
-        .count()) > 0
-    ) {
-      await playwright.waitAndClick(
-        signaturePageElements.signatureRequestScrollDownButton,
-        notificationPage,
-      );
-    }
-    await playwright.waitAndClick(
-      dataSignaturePageElements.confirmDataSignatureRequestButton,
-      notificationPage,
-      { waitForEvent: 'close' },
-    );
-    return true;
-  },
-
   async acceptAccess() {
     const notificationPage = await playwright.switchToKeplrNotification();
     await playwright.waitAndClick(
