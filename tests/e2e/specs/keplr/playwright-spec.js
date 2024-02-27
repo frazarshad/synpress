@@ -7,7 +7,7 @@ describe('Playwright', () => {
     });
     it(`assignActiveTabName should properly assign keplr tab as currently active and verify result using isKeplrWindowActive & isCypressWindowActive`, () => {
       cy.assignActiveTabName('keplr');
-      cy.isKeplrWindowActive().then(isActive => {
+      cy.isExtensionWindowActive().then(isActive => {
         expect(isActive).to.be.true;
       });
       cy.isCypressWindowActive().then(isActive => {
@@ -24,7 +24,7 @@ describe('Playwright', () => {
       cy.isCypressWindowActive().then(isActive => {
         expect(isActive).to.be.true;
       });
-      cy.isKeplrWindowActive().then(isActive => {
+      cy.isExtensionWindowActive().then(isActive => {
         expect(isActive).to.be.false;
       });
     });
