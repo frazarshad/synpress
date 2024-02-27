@@ -44,10 +44,10 @@ module.exports.dataSignaturePageElements = {
 };
 
 const permissionsPage = '.permissions-connect';
-const approveButton = `button[type="button"]`;
+const connectButton = `${permissionsPage} .permission-approval-container__footers .btn-primary`;
 module.exports.permissionsPageElements = {
   permissionsPage,
-  approveButton,
+  connectButton,
 };
 
 const popupContainer = '.popover-container';
@@ -65,7 +65,7 @@ const confirmPageHeader = `${notificationPage} .confirm-page-container-header`;
 const confirmPageContent = `${notificationPage} .confirm-page-container-content`;
 const networkLabel = `${confirmPageHeader} .network-display`;
 const senderButton = `${confirmPageHeader} .sender-to-recipient__party--sender`;
-const recipientButton = 'button[type="button"]';
+const recipientButton = `${confirmPageHeader} .sender-to-recipient__party--recipient-with-address`;
 const recipientAddressTooltipContainerButton = `${confirmPageHeader} .sender-to-recipient__party--recipient .sender-to-recipient__tooltip-container`;
 const editGasFeeLegacyButton = `${notificationPage} .transaction-detail-edit button`;
 const editGasFeeLegacyOverrideAckButton = `${notificationPage} .edit-gas-display .edit-gas-display__dapp-acknowledgement-button`;

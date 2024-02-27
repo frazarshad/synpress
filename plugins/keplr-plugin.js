@@ -31,7 +31,7 @@ module.exports = (on, config) => {
 
     if (!process.env.SKIP_METAMASK_INSTALL) {
       // NOTE: extensions cannot be loaded in headless Chrome
-      const metamaskPath = await helpers.prepareMetamask(
+      const metamaskPath = await helpers.prepareKeplr(
         process.env.METAMASK_VERSION || '10.25.0',
       );
       arguments_.extensions.push(metamaskPath);
@@ -66,17 +66,11 @@ module.exports = (on, config) => {
     confirmKeplrTransaction: keplr.confirmTransaction,
     setupKeplr: async ({
       secretWordsOrPrivateKey,
-      network,
-      password,
-      enableAdvancedSettings,
-      enableExperimentalSettings,
+      password
     }) => {
       await keplr.initialSetup(null, {
         secretWordsOrPrivateKey,
-        network,
-        password,
-        enableAdvancedSettings,
-        enableExperimentalSettings,
+        password
       });
       return true;
     },

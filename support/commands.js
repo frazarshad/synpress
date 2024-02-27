@@ -396,3 +396,11 @@ Cypress.Commands.add('acceptKeplrAccess', () => {
 Cypress.Commands.add('confirmKeplrTransaction', () => {
   return cy.task('confirmKeplrTransaction');
 });
+
+Cypress.Commands.add('isKeplrWindowActive', () => {
+  return cy.task('isKeplrWindowActive');
+});
+
+Cypress.Commands.add('switchToKeplrWindow', () => {
+  return cy.task('switchToKeplrWindow');
+});
