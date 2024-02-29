@@ -6,8 +6,7 @@ module.exports = (on, config) => {
   } else if (extension === 'keplr') {
     selectedConfig = require('./keplr-plugin');
   } else {
-     throw new InvalidInputException('${extension} is not a valid extension name')
-  }
+    throw new Error('${extension} is not a valid extension name');
   }
 
   return selectedConfig(on, config);
