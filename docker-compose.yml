@@ -76,9 +76,7 @@ services:
     profiles:
       - synpress
     container_name: agoric_chain
-    # image publication is WIP
-    # cf. https://github.com/Agoric/agoric-3-proposals/issues/6
-    image: agoric/offerup-test-chain:1.0.0
+    image: frazarshad/offerup-test-chain:1.0.0
     platform: linux/amd64
     ports:
       - 26656:26656
