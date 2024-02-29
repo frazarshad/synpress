@@ -79,7 +79,7 @@ jobs:
           echo -n "======> remote noVNC URL: "
           sleep 5
           curl -s localhost:4040/api/tunnels | jq -r .tunnels[0].public_url
-          pnpm test:e2e:anvil
+          pnpm test:e2e
         env:
           NGROK_AUTH: ${{ secrets.NGROK_AUTH }}
           NGROK_BASIC_AUTH: ${{ secrets.NGROK_BASIC_AUTH }}
