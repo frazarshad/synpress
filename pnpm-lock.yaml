@@ -19,7 +19,7 @@ importers:
     dependencies:
       '@cypress/code-coverage':
         specifier: ^3.11.0
-        version: 3.12.26(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(babel-loader@9.1.3)(cypress@12.17.3)(webpack@5.90.3)
+        version: 3.12.26(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(babel-loader@9.1.3)(cypress@12.17.4)(webpack@5.90.3)
       '@cypress/webpack-dev-server':
         specifier: ^3.5.2
         version: 3.7.4(debug@4.3.4)(webpack@5.90.3)
@@ -34,7 +34,7 @@ importers:
         version: 1.42.0
       '@testing-library/cypress':
         specifier: ^9.0.0
-        version: 9.0.0(cypress@12.17.3)
+        version: 9.0.0(cypress@12.17.4)
       '@testing-library/react':
         specifier: ^14.0.0
         version: 14.2.1(react-dom@18.2.0)(react@18.2.0)
@@ -75,8 +75,8 @@ importers:
         specifier: ^11.0.0
         version: 11.1.0
       cypress:
-        specifier: 12.17.3
-        version: 12.17.3
+        specifier: 12.17.4
+        version: 12.17.4
       cypress-wait-until:
         specifier: ^2.0.1
         version: 2.0.1
@@ -2432,7 +2432,7 @@ packages:
     resolution: {integrity: sha512-KvvX58MGMWh7xA+N+deCfunkA/ZNDvFLw4YbOmX3f/XBIkqrVY7qlotfy2aNb1kgp6h4B6Yc8YawJPDTfvWX7g==}
     dev: true
 
-  /@cypress/code-coverage@3.12.26(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(babel-loader@9.1.3)(cypress@12.17.3)(webpack@5.90.3):
+  /@cypress/code-coverage@3.12.26(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(babel-loader@9.1.3)(cypress@12.17.4)(webpack@5.90.3):
     resolution: {integrity: sha512-fJDELN3BNOPKm8JRZxHN/FrNebXpjX/PAsJYUbqp7SIn7Rk7MlDhKR5T0gFOzhrfvOpKmJ7t0dQf7kqRjb/LOQ==}
     peerDependencies:
       '@babel/core': ^7.0.1
@@ -2446,7 +2446,7 @@ packages:
       '@cypress/webpack-preprocessor': 6.0.1(@babel/core@7.23.9)(@babel/preset-env@7.23.9)(babel-loader@9.1.3)(webpack@5.90.3)
       babel-loader: 9.1.3(@babel/core@7.23.9)(webpack@5.90.3)
       chalk: 4.1.2
-      cypress: 12.17.3
+      cypress: 12.17.4
       dayjs: 1.11.10
       debug: 4.3.4(supports-color@8.1.1)
       execa: 4.1.0
@@ -4107,7 +4107,7 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
-  /@testing-library/cypress@9.0.0(cypress@12.17.3):
+  /@testing-library/cypress@9.0.0(cypress@12.17.4):
     resolution: {integrity: sha512-c1XiCGeHGGTWn0LAU12sFUfoX3qfId5gcSE2yHode+vsyHDWraxDPALjVnHd4/Fa3j4KBcc5k++Ccy6A9qnkMA==}
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
@@ -4115,7 +4115,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.9
       '@testing-library/dom': 8.20.0
-      cypress: 12.17.3
+      cypress: 12.17.4
     dev: false
 
   /@testing-library/dom@8.20.0:
@@ -4446,6 +4446,7 @@ packages:
 
   /@types/node@16.18.84:
     resolution: {integrity: sha512-mtn6ixzrUK5IMf6gyyMVUsm0TIeF3IYpUr3i0HHTuPJVbdZ6kc93poZ+wCkFNtxXoP/tyGrdVPOL6/WqGXjfXw==}
+    dev: false
 
   /@types/node@18.15.13:
     resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
@@ -4553,7 +4554,7 @@ packages:
     resolution: {integrity: sha512-lkxNGVFBEX825Z/FrHA8FLuKv1q5L6Bccqm08Zds2MUG4gd5al32hCpplzVumke3br+hkhtVmuPTfwQadIkc5w==}
     dependencies:
       '@testing-library/dom': 8.20.0
-      cypress: 12.17.3
+      cypress: 12.17.4
     dev: false
 
   /@types/triple-beam@1.3.5:
@@ -4599,7 +4600,7 @@ packages:
     resolution: {integrity: sha512-oJoftv0LSuaDZE3Le4DbKX+KS9G36NzOeSap90UIK0yMA/NhKJhqlSGtNDORNRaIbQfzjXDrQa0ytJ6mNRGz/Q==}
     requiresBuild: true
     dependencies:
-      '@types/node': 16.18.84
+      '@types/node': 20.11.21
     optional: true
 
   /@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.3.3):
@@ -5132,7 +5133,7 @@ packages:
       commander: 10.0.1
       dd-trace: 3.50.0
       deterministic-json: 1.0.5
-      esm: github.com/agoric-labs/esm/3603726ad4636b2f865f463188fcaade6375638e
+      esm: git/github.com+agoric-labs/esm/3603726ad4636b2f865f463188fcaade6375638e
       inquirer: 8.2.6
       opener: 1.5.2
       tmp: 0.2.2
@@ -5887,7 +5888,7 @@ packages:
     dependencies:
       ansi-align: 3.0.1
       camelcase: 7.0.1
-      chalk: 5.0.1
+      chalk: 5.3.0
       cli-boxes: 3.0.0
       string-width: 5.1.2
       type-fest: 2.19.0
@@ -6777,8 +6778,8 @@ packages:
     resolution: {integrity: sha512-+IyVnYNiaX1+C+V/LazrJWAi/CqiwfNoRSrFviECQEyolW1gDRy765PZosL2alSSGK8V10Y7BGfOQyZUDgmnjQ==}
     dev: false
 
-  /cypress@12.17.3:
-    resolution: {integrity: sha512-/R4+xdIDjUSLYkiQfwJd630S81KIgicmQOLXotFxVXkl+eTeVO+3bHXxdi5KBh/OgC33HWN33kHX+0tQR/ZWpg==}
+  /cypress@12.17.4:
+    resolution: {integrity: sha512-gAN8Pmns9MA5eCDFSDJXWKUpaL3IDd89N9TtIupjYnzLSmlpVr+ZR+vb4U/qaMp+lB6tBvAmt7504c3Z4RU5KQ==}
     engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
     hasBin: true
     requiresBuild: true
@@ -6818,6 +6819,7 @@ packages:
       minimist: 1.2.8
       ospath: 1.2.2
       pretty-bytes: 5.6.0
+      process: 0.11.10
       proxy-from-env: 1.0.0
       request-progress: 3.0.0
       semver: 7.6.0
@@ -12258,6 +12260,11 @@ packages:
       fromentries: 1.3.2
     dev: false
 
+  /process@0.11.10:
+    resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
+    engines: {node: '>= 0.6.0'}
+    dev: false
+
   /progress@2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
     engines: {node: '>=0.4.0'}
@@ -14430,6 +14437,7 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    requiresBuild: true
 
   /unicode-canonical-property-names-ecmascript@2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}
@@ -15362,8 +15370,8 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: true
 
-  github.com/agoric-labs/esm/3603726ad4636b2f865f463188fcaade6375638e:
-    resolution: {tarball: https://codeload.github.com/agoric-labs/esm/tar.gz/3603726ad4636b2f865f463188fcaade6375638e}
+  git/github.com+agoric-labs/esm/3603726ad4636b2f865f463188fcaade6375638e:
+    resolution: {commit: 3603726ad4636b2f865f463188fcaade6375638e, repo: git@github.com:agoric-labs/esm.git, type: git}
     name: esm
     version: 3.2.25
     engines: {node: '>=6'}
