@@ -99,9 +99,11 @@ jobs:
           echo ${{ steps.extract-version.outputs.current-version }}
           if echo ${{ steps.extract-version.outputs.current-version }} | grep -q "beta"; then
             pnpm release --ci --preRelease
+            ls
             pnpm publish --publish-branch 'fraz/test-npm'
           else
             pnpm release:patch --ci --preRelease=beta
+            ls
             pnpm publish --publish-branch 'fraz/test-npm'
           fi
         env:
