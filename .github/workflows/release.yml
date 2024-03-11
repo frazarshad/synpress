@@ -100,11 +100,11 @@ jobs:
           if echo ${{ steps.extract-version.outputs.current-version }} | grep -q "beta"; then
             pnpm release --ci --preRelease
             ls -la
-            pnpm publish --publish-branch 'fraz/test-npm' --force
+            pnpm publish --publish-branch 'fraz/test-npm'
           else
             pnpm release:patch --ci --preRelease=beta
             ls -la
-            pnpm publish --publish-branch 'fraz/test-npm' --force
+            pnpm publish --publish-branch 'fraz/test-npm' 
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
